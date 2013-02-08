@@ -96,6 +96,10 @@ function submitRubyCode() {
   QTApi["evaluateRuby(QString)"](ruby);
 }
 
+function replaceRubyCode(code) {
+  ruby = getEditor().Value(code);
+}
+
 function openRubyCode() {
   QTApi["openRubyFile(QString)"]("");
 }

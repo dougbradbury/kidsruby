@@ -10,7 +10,7 @@ class MainWidget < Qt::WebView
 
   signals 'stdInRequested()'
   slots 'rejectStdin()', 'acceptStdin()', 'QString language()', 'QStringList languages()',
-        'evaluateRuby(QString)', 'stopRuby()', 'runnerFinished(int, QProcess::ExitStatus)',
+        'evaluateRuby(QString)', 'stopRuby()', 'runnerFinished()',
         'setupQtBridge()', 'openRubyFile(const QString&)', 'saveRubyFile(const QString&)',
         'QString gets()', 'alert(const QString&)', 'QString ask(const QString&)',
         'append(const QString&)', 'appendError(const QString&)'
@@ -33,7 +33,7 @@ class MainWidget < Qt::WebView
 
     settings.setAttribute(Qt::WebSettings::LocalContentCanAccessRemoteUrls, true)
 
-    Qt::Object.connect(@frame,  SIGNAL("javaScriptWindowObjectCleared()"), 
+    Qt::Object.connect(@frame,  SIGNAL("javaScriptWindowObjectCleared()"),
                           self, SLOT('setupQtBridge()'))
     initialize_stdin_connection
     self.load Qt::Url.new(File.expand_path(File.dirname(__FILE__) + "/../../public/index.html"))
@@ -67,7 +67,7 @@ class MainWidget < Qt::WebView
   end
 
   def initialize_stdin_connection
-    Qt::Object.connect(self, SIGNAL("stdInRequested()"), 
+    Qt::Object.connect(self, SIGNAL("stdInRequested()"),
                           self, SLOT('acceptStdin()'))
     rejectStdin
   end
@@ -101,8 +101,10 @@ class MainWidget < Qt::WebView
     @frame.evaluateJavaScript("updateStdOut('STOPPED.<br/>');")
   end
 
-  def runnerFinished(code, status)
+  def runnerFinished()
     @frame.evaluateJavaScript("setStopButtonToRun();")
+
+    @frame.evaluateJavaScript("updateStdOut('#{@coder.encode(@runner.results[0].join(" "))}')")
   end
 
   def openRubyFile(nada)
@@ -195,7 +197,7 @@ class MainWidget < Qt::WebView
   end
 
   def gets
-    @stdInRejecter = StdinRejecter.new(self, Qt::Key_Return) 
+    @stdInRejecter = StdinRejecter.new(self, Qt::Key_Return)
     emit stdInRequested()
   end
 end
