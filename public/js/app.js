@@ -61,6 +61,14 @@ function updateStdOut(newHtml) {
   scrollToOutputEnd()
 };
 
+function clearSeeOut() {
+  $("#seeout").html('');
+}
+
+function updateSeeOut(newText) {
+  $("#seeout").append(decodeURI(newText));
+};
+
 function updateStdErr(newHtml) {
   $("#stderr").append(unescape(newHtml));
   scrollToOutputEnd()

@@ -4,7 +4,7 @@ source "http://rubygems.org"
 gem 'qtbindings'
 gem 'htmlentities'
 gem 'rubywarrior-i18n'
-gem 'seeing_is_believing'
+gem 'seeing_is_believing', :git => "https://github.com/JoshCheek/seeing_is_believing.git"
 
 group :development do
   gem 'guard'

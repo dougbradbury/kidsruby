@@ -103,8 +103,20 @@ class MainWidget < Qt::WebView
 
   def runnerFinished()
     @frame.evaluateJavaScript("setStopButtonToRun();")
+    @frame.evaluateJavaScript("clearSeeOut();")
 
-    @frame.evaluateJavaScript("updateStdOut('#{@coder.encode(@runner.results[0].join(" "))}')")
+    results = @runner.results
+    # once seeing is better, this functionality should be provided
+    ((results.min_line_number + 1)..results.max_line_number).each do |line_num|
+      # here is where we would choose to display errors differently, if we wanted (line_result.has_exception? and line_result.exception)
+      line = results[line_num]
+
+      line_s = line.join(' ') + "\\n"
+      if line.has_exception?
+        line_s = sprintf "%s: %s", line.exception.class, line.exception.message
+      end
+      @frame.evaluateJavaScript("updateSeeOut('#{@coder.encode(line_s)}');")
+    end
   end
 
   def openRubyFile(nada)
