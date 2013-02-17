@@ -1,7 +1,11 @@
 require 'seeing_is_believing'
 
 class Runner < Qt::Process
-  attr_accessor :results
+  attr_writer :results
+
+  def results
+    @results
+  end
 
   signals 'seeingFinished()'
 
@@ -14,14 +18,29 @@ class Runner < Qt::Process
         @main_widget, SLOT('runnerFinished()'))
   end
 
+  # deleteme
+  def debug(string)
+    File.open('/Users/dougbradbury/Projects/kidsruby/debug.output', 'a') { |f| f.puts string }
+  end
+
   def run(code = default_code, code_file_name = default_kid_code_location)
     @thread.kill if (@thread && @thread.alive?)
     # save_kid_code(code, code_file_name)
     @thread = Thread.new do
+      begin
       matrix_filename = File.expand_path('../../../lib/kidsruby/the_matrix', __FILE__)
-      believer = SeeingIsBelieving.new(build_code_from_fragment(code), filename: code_file_name, matrix_filename: matrix_filename)
-      @results = believer.call
+      @results = SeeingIsBelieving.call(build_code_from_fragment(code),
+                                        filename: code_file_name,
+                                        matrix_filename: matrix_filename,
+                                        encoding: 'u',
+    #                                     require:  [(File.expand_path(File.dirname(__FILE__) + "/../../lib/kidsruby"))]
+                                       )
       seeingFinished()
+      rescue Exception => e
+        debug(e.message)
+        debug(e.backtrace.join("\n"))
+      end
+
     end
   end
 
@@ -44,10 +63,10 @@ class Runner < Qt::Process
 
   def build_code_from_fragment(code)
     # add any default requires for kid code
-    new_code = "# -*- coding: utf-8 -*-\n"
     new_code = "require '" + File.expand_path(File.dirname(__FILE__) + "/../../lib/kidsruby") + "'\n"
     new_code << code
     new_code
+    code
   end
 
   def default_code

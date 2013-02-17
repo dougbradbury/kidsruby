@@ -5,6 +5,7 @@ gem 'qtbindings'
 gem 'htmlentities'
 gem 'rubywarrior-i18n'
 gem 'seeing_is_believing', :git => "https://github.com/JoshCheek/seeing_is_believing.git"
+#gem 'seeing_is_believing', :path => "../seeing_is_believing"
 
 group :development do
   gem 'guard'

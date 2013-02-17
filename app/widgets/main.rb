@@ -105,12 +105,8 @@ class MainWidget < Qt::WebView
     @frame.evaluateJavaScript("setStopButtonToRun();")
     @frame.evaluateJavaScript("clearSeeOut();")
 
-    results = @runner.results
+    @runner.results.each do | line |
     # once seeing is better, this functionality should be provided
-    ((results.min_line_number + 1)..results.max_line_number).each do |line_num|
-      # here is where we would choose to display errors differently, if we wanted (line_result.has_exception? and line_result.exception)
-      line = results[line_num]
-
       line_s = line.join(' ') + "\\n"
       if line.has_exception?
         line_s = sprintf "%s: %s", line.exception.class, line.exception.message

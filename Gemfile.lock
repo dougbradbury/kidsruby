@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/JoshCheek/seeing_is_believing.git
-  revision: 5d54f66b53072cd5ab9dbca92b7dcfc8b97cdb41
+  revision: 8e703ee7c501d52a0e406eccf28f58e5ea8fca54
   specs:
     seeing_is_believing (0.0.10)
 

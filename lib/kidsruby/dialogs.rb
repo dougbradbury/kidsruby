@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # this is designed to trigger dialogs for kidsruby for ask and alert compatible with hackety hack
 def is_numeric?(value)
   Float(value) != nil rescue false
@@ -7,7 +8,7 @@ def convert_to_number(value)
   value = Float(value)
   value.to_i == value ? value.to_i : value
 end
-  
+
 def ask(text)
   init_interface
 
@@ -22,7 +23,7 @@ def ask(text)
     end
 
     $stderr.puts("Ask call failed: %s\n" % reply.error_message)
-  end  
+  end
   return nil
 end
 
